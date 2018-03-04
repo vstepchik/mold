@@ -1,0 +1,19 @@
+[package]
+name = "mold"
+version = "0.1.0"
+authors = ["Thing <thing@mold.world>"]
+
+[dependencies]
+time = "0.1.37"
+regex = "0.2.2"
+
+piston = "0.32.0"
+piston_window = "0.66.0"
+piston2d-graphics = "0.21.1"
+piston2d-opengl_graphics = "0.43.0"
+find_folder = "0.3.0"
+specs = "0.9.1"
+
+mold_world = { path = "mold_world" }
+
+[workspace]

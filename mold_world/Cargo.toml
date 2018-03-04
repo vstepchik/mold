@@ -1,0 +1,6 @@
+[package]
+name = "mold_world"
+version = "0.1.0"
+authors = ["Vitaliy Stepchik <vitalatron@gmail.com>"]
+
+[dependencies]
