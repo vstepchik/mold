@@ -1,19 +1,41 @@
-struct Temperature(u16);
-struct Elevation(u8);
+// todo: implement Z-order curve
 
+const TILE_SIDE: u32 = 32;
+
+#[derive(Copy, Clone)]
+struct Temperature(u16);
+#[derive(Copy, Clone)]
+struct Elevation(u8);
+#[derive(Copy, Clone)]
+struct TileCoordinate(u64);
+#[derive(Copy, Clone)]
 enum GroundType {
     Dirt,
     Grass,
+    Sand,
     Water,
 }
 
-struct Tile {
+#[derive(Copy, Clone)]
+struct Cell {
     temperature: Temperature,
     elevation: Elevation,
     ground: GroundType,
 }
 
+struct Tile {
+    coord: TileCoordinate,
+    cells: [Cell; (TILE_SIDE * TILE_SIDE) as usize],
+}
+
+impl Tile {
+    pub fn new() -> Self {
+        Tile { coord: TileCoordinate(0), cells: [Cell {temperature: Temperature(0), elevation: Elevation(0), ground: GroundType::Dirt}; (TILE_SIDE * TILE_SIDE) as usize] }
+    }
+}
+
 use std::ops::{Add, Sub};
+
 impl Add for Elevation {
     type Output = Self;
 
@@ -29,11 +51,25 @@ impl Sub for Elevation {
     }
 }
 
+impl Add for Temperature {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Temperature(self.0 + rhs.0)
+    }
+}
+impl Sub for Temperature {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Temperature(self.0 - rhs.0)
+    }
+}
+
 pub fn report_struct_size() {
+    let tile = Tile::new();
     let temp: Temperature = Temperature(335);
     let elev: Elevation = Elevation(12);
-//    let sum = temp + elev;
-//    println!("sum = {}", sum);
 
     use std::mem;
     println!("\
@@ -41,12 +77,15 @@ pub fn report_struct_size() {
     Temperature: {}
     Elevation: {}
     GroundType: {}
+    Cell: {}
     Tile: {}
     ",
              mem::size_of::<Temperature>(),
              mem::size_of::<Elevation>(),
              mem::size_of::<GroundType>(),
-             mem::size_of::<Tile>());
+             mem::size_of::<Cell>(),
+             mem::size_of::<Tile>(),
+    );
 }
 
 #[cfg(test)]
