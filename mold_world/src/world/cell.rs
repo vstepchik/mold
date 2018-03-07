@@ -9,6 +9,7 @@ pub struct Cell {
 }
 
 impl Cell {
+    #[inline]
     pub fn new() -> Self {
         Cell {
             temperature: Temperature(0),

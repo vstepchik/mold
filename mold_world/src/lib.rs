@@ -13,7 +13,7 @@ pub fn report_struct_size() {
 
     use std::mem;
     println!("\
-    Sizes in bytes:
+    Struct sizes in bytes:
     Temperature: {}
     Elevation: {}
     GroundType: {}

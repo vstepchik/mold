@@ -36,7 +36,7 @@ fn run() -> Result<()> {
 
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
-            .clear_target([0.0, 0.2, 0.15, 1.0], 1.0)
+            .clear_target([0.0, 0.1, 0.07, 1.0], 1.0)
             .with_pass(DrawFlat::<PosTex>::new()),
     );
 
