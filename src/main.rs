@@ -1,38 +1,24 @@
 extern crate amethyst;
 extern crate mold_world;
 
+use amethyst::core::transform::TransformBundle;
+use amethyst::input::InputBundle;
 use amethyst::prelude::*;
-use amethyst::renderer::{DisplayConfig, DrawFlat, Event, KeyboardInput,
-                         Pipeline, PosTex, RenderBundle, Stage,
-                         VirtualKeyCode, WindowEvent};
+use amethyst::renderer::{DisplayConfig, DrawFlat, Pipeline, PosTex, RenderBundle, Stage};
 use amethyst::Result;
+use mold::Mold;
+use systems::PlayerSystem;
 use mold_world::report_struct_size;
 
-struct Mold;
-
-impl State for Mold {
-    fn handle_event(&mut self, _: &mut World, event: Event) -> Trans {
-        match event {
-            Event::WindowEvent { event, .. } => match event {
-                WindowEvent::KeyboardInput {
-                    input:
-                    KeyboardInput {
-                        virtual_keycode: Some(VirtualKeyCode::Escape),
-                        ..
-                    },
-                    ..
-                } => Trans::Quit,
-                _ => Trans::None,
-            },
-            _ => Trans::None,
-        }
-    }
-}
+mod mold;
+mod systems;
 
 fn run() -> Result<()> {
     let path = "./resources/display_config.ron";
-
     let config = DisplayConfig::load(&path);
+
+    let input_bundle = InputBundle::<String, String>::new()
+        .with_bindings_from_file("./resources/bindings.ron");
 
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
@@ -41,7 +27,10 @@ fn run() -> Result<()> {
     );
 
     let mut game = Application::build("./", Mold)?
+        .with_bundle(TransformBundle::new())?
         .with_bundle(RenderBundle::new(pipe, Some(config)))?
+        .with_bundle(input_bundle)?
+        .with(PlayerSystem, "player_system", &[])
         .build()?;
     game.run();
 

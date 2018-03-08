@@ -1,0 +1,7 @@
+(
+  axes: {
+    "player_h": (pos: Key(Right), neg: Key(Left)),
+    "player_v": (pos: Key(Up), neg: Key(Down)),
+  },
+  actions: {},
+)
