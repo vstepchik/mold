@@ -3,17 +3,19 @@ use amethyst::core::cgmath::Vector3;
 use amethyst::core::transform::{GlobalTransform, Transform};
 use amethyst::ecs::{Component, DenseVecStorage};
 use amethyst::prelude::*;
-use amethyst::renderer::{Camera, Event, KeyboardInput, Material, MaterialDefaults,
+use amethyst::renderer::{Event, KeyboardInput, Material, MaterialDefaults,
                          MeshHandle, PosTex, VirtualKeyCode, WindowEvent};
+use display::camera;
 
 pub struct Mold;
+
 pub const SIZE: f32 = 0.05;
 
 impl State for Mold {
     fn on_start(&mut self, world: &mut World) {
         world.register::<Player>();
         initialise_player(world);
-        initialise_camera(world);
+        camera::initialise_camera(world);
     }
 
     fn handle_event(&mut self, _: &mut World, event: Event) -> Trans {
@@ -103,13 +105,6 @@ fn create_colour_material(world: &World, colour: [f32; 4]) -> Material {
         albedo,
         ..mat_defaults.0.clone()
     }
-}
-
-fn initialise_camera(world: &mut World) {
-    world
-        .create_entity()
-        .with(Camera::standard_2d())
-        .build();
 }
 
 #[derive(Debug)]

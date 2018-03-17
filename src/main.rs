@@ -1,5 +1,5 @@
 extern crate amethyst;
-extern crate mold_world;
+extern crate world;
 
 use amethyst::core::transform::TransformBundle;
 use amethyst::input::InputBundle;
@@ -8,10 +8,11 @@ use amethyst::renderer::{DisplayConfig, DrawFlat, Pipeline, PosTex, RenderBundle
 use amethyst::Result;
 use mold::Mold;
 use systems::PlayerSystem;
-use mold_world::report_struct_size;
+use world::report_struct_size;
 
 mod mold;
 mod systems;
+mod display;
 
 fn run() -> Result<()> {
     let path = "./resources/display_config.ron";
@@ -42,5 +43,7 @@ fn main() {
     if let Err(e) = run() {
         println!("Error occurred during game execution: {}", e);
         ::std::process::exit(1);
+    } else {
+        println!("\n~See ya!")
     }
 }

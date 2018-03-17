@@ -1,5 +1,5 @@
 [package]
-name = "mold_world"
+name = "world"
 version = "0.1.0"
 authors = ["Vitaliy Stepchik <vitalatron@gmail.com>"]
 
