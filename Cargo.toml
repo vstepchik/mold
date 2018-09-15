@@ -4,10 +4,7 @@ version = "0.1.0"
 authors = ["Thing <thing@mold.world>"]
 
 [dependencies]
-#time = "0.1.37"
-#regex = "0.2.2"
-#find_folder = "0.3.0"
-amethyst = { git = "https://github.com/amethyst/amethyst", branch = "develop" }
+amethyst = "0.8"
 
 world = { path = "world" }
 

@@ -6,6 +6,7 @@ use amethyst::input::InputBundle;
 use amethyst::prelude::*;
 use amethyst::renderer::{DisplayConfig, DrawFlat, Pipeline, PosTex, RenderBundle, Stage};
 use amethyst::Result;
+use amethyst::ui::{UiBundle, DrawUi};
 use mold::Mold;
 use systems::PlayerSystem;
 use world::report_struct_size;
@@ -24,10 +25,12 @@ fn run() -> Result<()> {
     let pipe = Pipeline::build().with_stage(
         Stage::with_backbuffer()
             .clear_target([0.0, 0.1, 0.07, 1.0], 1.0)
-            .with_pass(DrawFlat::<PosTex>::new()),
+            .with_pass(DrawFlat::<PosTex>::new())
+            .with_pass(DrawUi::new()),
     );
 
     let mut game = Application::build("./", Mold)?
+        .with_bundle(UiBundle::<String, String>::new())?
         .with_bundle(TransformBundle::new())?
         .with_bundle(RenderBundle::new(pipe, Some(config)))?
         .with_bundle(input_bundle)?

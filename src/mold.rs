@@ -1,24 +1,44 @@
-use amethyst::assets::Loader;
+use amethyst::assets::{AssetStorage, Loader, Handle};
 use amethyst::core::cgmath::Vector3;
 use amethyst::core::transform::{GlobalTransform, Transform};
 use amethyst::ecs::{Component, DenseVecStorage};
 use amethyst::prelude::*;
 use amethyst::renderer::{Event, KeyboardInput, Material, MaterialDefaults,
-                         MeshHandle, PosTex, VirtualKeyCode, WindowEvent};
+                         MeshHandle, PosTex, VirtualKeyCode, WindowEvent, Texture, PngFormat};
+use amethyst::ui::{MouseReactive, UiImage, UiTransform, Anchor};
 use display::camera;
 
 pub struct Mold;
 
 pub const SIZE: f32 = 0.05;
 
-impl State for Mold {
+impl State<()> for Mold {
     fn on_start(&mut self, world: &mut World) {
+        let logo = Mold::load_texture(world, "assets/human.png");
+        world
+            .create_entity()
+            .with(UiTransform::new(
+                "logo".to_string(),
+                Anchor::TopLeft,
+                100.,
+                100.,
+                0.,
+                32.,
+                32.,
+                0,
+            ))
+            .with(UiImage {
+                texture: logo.clone(),
+            })
+            .with(MouseReactive)
+            .build();
+
         world.register::<Player>();
         initialise_player(world);
         camera::initialise_camera(world);
     }
 
-    fn handle_event(&mut self, _: &mut World, event: Event) -> Trans {
+    fn handle_event(&mut self, _: &mut World, event: Event) -> Trans<()> {
         match event {
             Event::WindowEvent { event, .. } => match event {
                 WindowEvent::KeyboardInput {
@@ -58,10 +78,7 @@ fn initialise_player(world: &mut World) {
         .build();
 }
 
-fn generate_rectangle_vertices(left: f32,
-                               bottom: f32,
-                               right: f32,
-                               top: f32) -> Vec<PosTex> {
+fn generate_rectangle_vertices(left: f32, bottom: f32, right: f32, top: f32) -> Vec<PosTex> {
     vec![
         PosTex {
             position: [left, bottom, 0.],
@@ -118,4 +135,17 @@ impl Player {
 
 impl Component for Player {
     type Storage = DenseVecStorage<Self>;
+}
+
+impl Mold {
+    fn load_texture(world: &World, path: &str) -> Handle<Texture> {
+        let loader = world.read_resource::<Loader>();
+        loader.load(
+            path,
+            PngFormat,
+            Default::default(),
+            (),
+            &world.read_resource::<AssetStorage<Texture>>(),
+        )
+    }
 }
